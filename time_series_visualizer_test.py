@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import pandas as pd
+import numpy as np
 import datetime
 import seaborn as sns
 from pandas.plotting import register_matplotlib_converters
@@ -55,16 +56,30 @@ def draw_line_plot():
 def draw_bar_plot():
     # Copy and modify data for monthly bar plot
     df_bar = df.copy()
-    df_bar['year'] = pd.DatetimeIndex(df_bar['Date']).year
-    df_bar['month'] = pd.DatetimeIndex(df_bar['Date']).month
-    # Draw bar plot
+    df_bar['year'] = pd.DatetimeIndex(df_bar['date']).year
+    df_bar['months'] = df_bar['date'].dt.month_name()
+    df_bar.dropna()
 
-    fig = plt.figure(figsize=(8, 6))
-    plt.plot(df_bar['date'], df_bar['value'])
+    months = ["January", "February", "March", "April", "May", "June",
+          "July", "August", "September", "October", "November", "December"]
 
-    plt.xlabel("Date")
-    plt.ylabel("Page Views")
-    plt.title('Daily freeCodeCamp Forum Page Views 5/2016-12/2019')
+    df_bar['months'] = pd.Categorical(df_bar['months'], categories=months, ordered=True)
+    df_bar = df_bar.groupby(['year','months'])['value'].mean().reset_index(name='average')
+    df_bar = df_bar.pivot(index="year", columns="months", values="average")
+
+    fig, ax = plt.subplots(figsize=(10, 8), layout='constrained')
+
+    bar_width = 0.05
+    x = np.arange(len(df_bar))
+    for i, sub_cat in enumerate(df_bar.columns):
+        ax.bar(x + i * bar_width, df_bar[sub_cat], width=bar_width, label=sub_cat)
+
+    ax.set_xlabel("Years")
+    ax.set_ylabel("Average Page Views")
+    ax.legend(title="Months", loc='upper left')
+    ax.set_xticks(x + bar_width / 2)
+    ax.set_xticklabels(df_bar.index)
+    ax.tick_params(axis='x', labelrotation=90)
 
     # Save image and return fig (don't change this part)
     fig.savefig('bar_plot.png')
@@ -72,31 +87,3 @@ def draw_bar_plot():
 '''
 
 
-df_bar = df.copy()
-df_bar['year'] = pd.DatetimeIndex(df_bar['date']).year
-df_bar['month'] = pd.DatetimeIndex(df_bar['date']).month
-#df_bar['month'] = calendar.month_name[df_bar['month']]
-
-result = df_bar.dt.month_name(locale = 'English')
-print(result.head())
-
-df_bar = df_bar.drop(columns=['date'])
-
-#print(df_bar.head())
-
-#print(df_bar.groupby(['year','month']).mean())
-
-#df_bar = pd.melt(df_bar, id_vars=['year','month'], value_vars=['value'])
-#df_bar = df_bar.groupby(['year', 'month', 'value'])['year'].mean().reset_index(name='average')
-
-
-'''
-df_bar = df.copy()
-fig = plt.figure(figsize=(8, 6))
-plt.plot(df_bar['year'], df_bar['value'])
-plt.xlabel("Date")
-plt.ylabel("Page Views")
-
-plt.xlabel("Years")
-plt.ylabel("Average Page Views")
-'''
