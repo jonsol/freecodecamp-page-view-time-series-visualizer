@@ -18,21 +18,7 @@ df['date'] = pd.to_datetime(df['date'], format='%Y-%m-%d')
 df = df.loc[(df['value'] >= df['value'].quantile(0.025))
 & (df['value'] <= df['value'].quantile(0.975))]
 
-'''
-df_line_chart = df.copy()
 
-x = df_line_chart['date']
-y = df_line_chart['value']
-
-fig = plt.figure(figsize=(8, 6))
-plt.plot(df_line_chart['date'], df_line_chart['value'])
-
-plt.xlabel("Date")
-plt.ylabel("Page Views")
-plt.title('Daily freeCodeCamp Forum Page Views 5/2016-12/2019')
-'''
-
-'''
 def draw_line_plot():
     # Draw line plot
     df_line = df.copy()
@@ -47,13 +33,10 @@ def draw_line_plot():
     # Save image and return fig (don't change this part)
     fig.savefig('line_plot.png')
     return fig
-'''
 
 
 
 
-
-'''
 def draw_bar_plot():
     # Copy and modify data for monthly bar plot
     df_bar = df.copy()
@@ -85,7 +68,7 @@ def draw_bar_plot():
     # Save image and return fig (don't change this part)
     fig.savefig('bar_plot.png')
     return fig
-'''
+
 
 # Prepare data for box plots (this part is done!)
     df_box = df.copy()

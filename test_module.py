@@ -1,6 +1,15 @@
 import unittest
 import time_series_visualizer
 import matplotlib as mpl
+import matplotlib.pyplot as plt
+import pandas as pd
+import numpy as np
+import datetime
+import seaborn as sns
+from pandas.plotting import register_matplotlib_converters
+register_matplotlib_converters()
+import matplotlib.dates as mdates
+import calendar
 
 class DataCleaningTestCase(unittest.TestCase):
     def test_data_cleaning(self):

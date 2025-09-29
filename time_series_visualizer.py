@@ -1,8 +1,12 @@
 import matplotlib.pyplot as plt
 import pandas as pd
+import numpy as np
+import datetime
 import seaborn as sns
 from pandas.plotting import register_matplotlib_converters
 register_matplotlib_converters()
+import matplotlib.dates as mdates
+import calendar
 
 # Import data (Make sure to parse dates. Consider setting index column to 'date'.)
 df = pd.read_csv('fcc-forum-pageviews.csv')
@@ -86,3 +90,8 @@ def draw_box_plot():
     # Save image and return fig (don't change this part)
     fig.savefig('box_plot.png')
     return fig
+
+
+draw_box_plot()
+#draw_bar_plot()
+#draw_line_plot()
