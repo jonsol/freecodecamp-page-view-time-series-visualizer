@@ -18,7 +18,7 @@ df['date'] = pd.to_datetime(df['date'], format='%Y-%m-%d')
 df = df.loc[(df['value'] >= df['value'].quantile(0.025))
 & (df['value'] <= df['value'].quantile(0.975))]
 
-
+'''
 df_line_chart = df.copy()
 
 x = df_line_chart['date']
@@ -30,6 +30,7 @@ plt.plot(df_line_chart['date'], df_line_chart['value'])
 plt.xlabel("Date")
 plt.ylabel("Page Views")
 plt.title('Daily freeCodeCamp Forum Page Views 5/2016-12/2019')
+'''
 
 '''
 def draw_line_plot():
@@ -85,5 +86,28 @@ def draw_bar_plot():
     fig.savefig('bar_plot.png')
     return fig
 '''
+
+# Prepare data for box plots (this part is done!)
+    df_box = df.copy()
+    df_box.reset_index(inplace=True)
+    df_box['year'] = [d.year for d in df_box.date]
+    df_box['month'] = [d.strftime('%b') for d in df_box.date]
+    df_box.dropna()
+
+    months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+          "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    df_box['month'] = pd.Categorical(df_box['month'], categories=months, ordered=True)
+
+    # Draw box plots (using Seaborn)
+
+    fig, axes = plt.subplots(1, 2, figsize=(13, 5))
+    box_1 = sns.boxplot(data=df_box, x='year', y='value', hue='year', palette='pastel',
+                        ax=axes[0]).set(xlabel='Year', ylabel='Page Views',title="Year-wise Box Plot (Trend)")
+
+    box_2 = sns.boxplot(data=df_box, x='month', y='value', hue='month', palette='pastel',
+                        ax=axes[1]).set(xlabel='Month', ylabel='Page Views',title="Month-wise Box Plot (Seasonality)")
+    for ax in axes:
+        ax.legend([], [], frameon=False)
+
 
 
